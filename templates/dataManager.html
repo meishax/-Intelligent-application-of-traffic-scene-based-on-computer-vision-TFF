@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>数据管理模块</title>
+    <link href="main_css.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">	
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=4fTH4IpG204pHWnekXS8cmAXGxIFEd74"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+
+    <script src="http://oss.sheetjs.com/js-xlsx/xlsx.full.min.js"></script>
+    <script src="https://cdn.bootcss.com/PapaParse/5.0.0-beta.0/papaparse.js"></script>
+    <script src="https://cdn.bootcss.com/PapaParse/5.0.0-beta.0/papaparse.min.js"></script>
+
+    <style type="text/css">
+    	#top_row{text-align: center;}
+		#index_row div text{font-color:lighten(#000, 33.5%);}
+         .fileinput-button input{
+            position:absolute;
+            right: 0px;
+            top:0px;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    	<div id='top_row' class="row" style="height: 80px;">
+    		<div class="col-md-1"></div>
+    		<div id='top_row_title' class="col-md-10">
+                <h1>城市交通流量大数据系统<small>成都区域</small></h1>
+    		</div>
+    		<div class="col-md-1"></div>
+    	</div>
+
+
+    	<hr style="filter: alpha(opacity=100,finishopacity=0,style=1)" width="100%" color='#C0C0C0' size=3>
+
+
+    	<div id='index_row' class="row" style="height: 50px;">
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+    		     <li role="presentation col-md-3" ><a href="show">可视化模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                 <li role="presentation col-md-3 text-center"><a href="predict">预测模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                <li role="presentation col-md-3 text-center"><a href="train">训练模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                <li role="presentation col-md-3 text-center"   class="active"><a href="#">数据管理模块</a></li>
+            </ul>
+    	</div>
+
+		<div id='toolBar' class="panel panel-default" style="height: 70px">
+            <div class="panel-body">
+				<div class="row">
+					<div class="col-md-8">
+						<div class="input-group">
+							<span class="input-group-addon">区域编号</span>
+							<input id='search_region' type="text" class="form-control" placeholder="空值默认查询所有记录">
+							<span class="input-group-addon">日期</span>
+							<input id='search_time' type="text" class="form-control" placeholder="空值默认查询所有记录">
+							<span class="input-group-addon">
+								<input  type="button" value="查询" onclick="searchByRegionAndTime()">
+							</span>
+						</div>
+					</div>
+					<div class="col-md-4">
+                        <button type="button" class="pull-right btn btn-success fileinput-button" style="margin-right: 10px;" onclick="importData()">
+                            <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>导入
+                            <input type="file" onchange="importData(this)" value="数据导入" />
+                        </button>
+
+                        <button type="button" class="pull-right btn btn-warning" style="margin-right: 10px;" onclick="deleteAllData()"><span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"></span>清空</button>
+                        
+                        <button type="button" class="pull-right btn btn-info" style="margin-right: 10px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增</button>
+
+		     			
+					</div>
+				</div>
+     		</div>
+     	</div>
+     	<br>
+     	<div id='dataTable'>
+     		<table id="tab1" class="table table-hover">
+				 	<thead>
+						<tr style="text-align: center;">
+							<td width="10%">#</td>
+							<td width="15%">区域编号</td>
+							<td width="40%">时间</td>
+							<td width="15%">流量值</td>
+							<td width="20%">opt</td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+			</table>
+     	</div>
+
+    </div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+	load();
+
+    function load() {
+    	var sdata={'region':'','time':''}
+        $.ajax({
+            type:'post',
+            url:'/dataManager_search',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+            	request=eval('(' + request + ')')
+            	datalist=request.datalist
+                showTab(datalist)
+            }
+        });
+    }
+    
+    function importData(obj) {
+        var f = obj.files[0];
+        var fpath = 'data/'+f.name;
+        var sdata={'filePath':fpath}
+        $.ajax({
+            type:'post',
+            url:'/dataManager_importData',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+                alert(数据导入完成)
+                load();
+            }
+        });
+    }
+
+    function deleteAllData(){
+    	$.ajax({
+            type:'post',
+            url:'/dataManager_deleteAllData',
+            async:false,
+            data:{opt:'deleteAll'},
+            datatype:'json',
+            success:function (request) {
+                alert(数据已清空)
+                load();
+            }
+        });
+    }
+
+    function searchByRegionAndTime(){
+    	var region=$("input[id='search_region']").val();
+    	var time=$("input[id='search_time']").val();
+    	var sdata={'region':region,'time':time}
+    	$.ajax({
+            type:'post',
+            url:'/dataManager_search',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+            	request=eval('(' + request + ')')
+            	datalist=request.datalist
+                showTab(datalist)
+            }
+        });
+    }
+
+    function showTab(datalist){
+    	$("#tab1 tbody").empty("");
+
+    	var j=0;
+    	if(datalist.length>1440){
+            j=1440;
+        }
+    	else{
+    	    j=datalist.length
+        }
+
+    	for(var i=0;i<j;i=i+1){
+			var s="";
+			s = s+"<tr style=\"text-align: center;\">"+
+				//"<td>" + "<input type=\"checkbox\">" + "</td>"+
+				"<td>" + (i+1)+ "</td>"+
+				"<td>" + datalist[i][0] + "</td>"+
+				"<td>" + datalist[i][1] + "</td>"+
+				"<td>" + datalist[i][2] + "</td>"+
+				"<td>" + "<input type=\"button\" name=\""+i+"\" value=\"修改\" onclick=\"\" >"+ "<input type=\"button\" name=\""+i+"\" value=\"删除\" onclick=\"\" >"+"</td>"+
+				"</tr>";
+			$("#tab1 tbody").append(s);
+		}
+    }
+</script>
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js">!function(){function n(n,e,t){return n.getAttribute(e)||t}function e(n){return document.getElementsByTagName(n)}function t(){var t=e("script"),o=t.length,i=t[o-1];return{l:o,z:n(i,"zIndex",-1),o:n(i,"opacity",.5),c:n(i,"color","0,0,0"),n:n(i,"count",99)}}function o(){a=m.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,c=m.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight}function i(){r.clearRect(0,0,a,c);var n,e,t,o,m,l;s.forEach(function(i,x){for(i.x+=i.xa,i.y+=i.ya,i.xa*=i.x>a||i.x<0?-1:1,i.ya*=i.y>c||i.y<0?-1:1,r.fillRect(i.x-.5,i.y-.5,1,1),e=x+1;e<u.length;e++)n=u[e],null!==n.x&&null!==n.y&&(o=i.x-n.x,m=i.y-n.y,l=o*o+m*m,l<n.max&&(n===y&&l>=n.max/2&&(i.x-=.03*o,i.y-=.03*m),t=(n.max-l)/n.max,r.beginPath(),r.lineWidth=t/2,r.strokeStyle="rgba("+d.c+","+(t+.2)+")",r.moveTo(i.x,i.y),r.lineTo(n.x,n.y),r.stroke()))}),x(i)}var a,c,u,m=document.createElement("canvas"),d=t(),l="c_n"+d.l,r=m.getContext("2d"),x=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(n){window.setTimeout(n,1e3/45)},w=Math.random,y={x:null,y:null,max:2e4};m.id=l,m.style.cssText="position:fixed;top:0;left:0;z-index:"+d.z+";opacity:"+d.o,e("body")[0].appendChild(m),o(),window.onresize=o,window.onmousemove=function(n){n=n||window.event,y.x=n.clientX,y.y=n.clientY},window.onmouseout=function(){y.x=null,y.y=null};for(var s=[],f=0;d.n>f;f++){var h=w()*a,g=w()*c,v=2*w()-1,p=2*w()-1;s.push({x:h,y:g,xa:v,ya:p,max:6e3})}u=s.concat([y]),setTimeout(function(){i()},100)}();</script>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>预测模块</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+
+        <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">	
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <link href="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/i18n/defaults-cs_CZ.js"></script>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=4fTH4IpG204pHWnekXS8cmAXGxIFEd74"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+</head>
+<body>
+	<div class="container">
+    	<div id='top_row' class="row" style="height: 80px;">
+    		<div class="col-md-1"></div>
+    		<div id='top_row_title' class="col-md-10" style="text-align: center">
+                <h1>城市交通流量大数据系统<small>成都区域</small></h1>
+    		</div>
+    		<div class="col-md-1"></div>
+    	</div>
+
+
+    	<hr style="filter: alpha(opacity=100,finishopacity=0,style=1)" width="100%" color='#C0C0C0' size=3>
+
+
+    	<div id='index_row' class="row" style="height: 50px;">
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+    		     <li role="presentation col-md-3" ><a href="show">可视化模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                 <li role="presentation col-md-3 text-center"  class="active"><a href="#">预测模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                <li role="presentation col-md-3 text-center"><a href="train">训练模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                <li role="presentation col-md-3 text-center"><a href="dataManager">数据管理模块</a></li>
+            </ul>
+    	</div>
+
+    	<div class="panel panel-default">
+  			<div class="panel-heading"><h4>预测接口1（连续时序流量数据预测下一时刻值)</h4></div>
+ 			<div class="panel-body row">
+ 				<span class="col-md-12"><text class='pull-left' style="font-size: 16px;margin-bottom: 10px;">请输入连续时序流量值</text></span>
+ 				<span class="col-md-3" style="text-align: left;margin-bottom: 5px;"><span class="label label-warning" style="margin-right: 2px;">  区域编号:</span><input id="pre1_region" type="text"  value="2"></span>
+ 				<span class="col-md-9"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-11时刻:</span><input id="pre1_f_t11" type="text"  value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-10时刻:</span><input id="pre1_f_t10" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-9时刻:</span><input id="pre1_f_t9" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-8时刻:</span><input id="pre1_f_t8" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-7时刻:</span><input id="pre1_f_t7" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-6时刻:</span><input id="pre1_f_t6" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-5时刻:</span><input id="pre1_f_t5" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-4时刻:</span><input id="pre1_f_t4" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-3时刻:</span><input id="pre1_f_t3" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-2时刻:</span><input id="pre1_f_t2" type="text" value="0"></span>
+ 				<span class="col-md-3" style="text-align: center;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">t-1时刻:</span><input id="pre1_f_t1" type="text" value="0"></span>
+   			 	<span class="col-md-3" style="text-align: center;margin-bottom: 20px;"><span class="label label-default" style="margin-right: 2px;">t-0时刻:</span><input id="pre1_f_t0" type="text" value="0"></span>
+   			 	<span class="col-md-10"></span>
+				<button class="pull-righ btn btn-default col-md-1 " onclick="ajax_predict1()" style="margin-right: 10px;" value="">
+                	<span class="glyphicon glyphicon-hand-right" aria-hidden="true" style="margin-right:2px;"></span> 预测
+                </button>
+  				<hr style="filter: alpha(opacity=100,finishopacity=0,style=1)" width="100%" color='#C0C0C0' size=3>
+  				<span class="col-md-12"><text class='pull-left' style="font-size: 16px;margin-bottom: 10px;">预测结果</text></span>
+  				<span class="col-md-12" style="font-size:20px;"><span class="label label-default" style="margin-right: 10px;margin-left: 180px;">t+1时刻:</span><text id="pre1_b_t1"></text></span>
+  				<div class="col-md-5" style="text-align: center">
+  					<div id="gauge" style="height: 300px;width: 100%"></div>
+  				</div>
+  				<div class="col-md-1"></div>
+  				<div class="col-md-6" style="text-align: center">
+  					<div id="linemap1" style="height: 300px;width: 100%"></div>
+  				</div>
+  			</div>
+		</div>
+		
+		<div class="panel panel-default">
+  			<div class="panel-heading"><h4>预测接口2（今日48个时间段流量值预测明日48个时间段流量值)</h4></div>
+ 			<div class="panel-body row">
+ 				<span class="col-md-12"><text class='pull-left' style="font-size: 16px;margin-bottom: 10px;">请输入今日48个时间段流量值</text></span>
+ 				<span class="col-md-12" style="text-align: left;margin-bottom: 5px;"><span class="label label-warning" style="margin-right: 2px;">  区域编号:</span><input id="pre1_region" type="text"  value="2"></span>
+ 				<span class="col-md-10" style="text-align: left;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">流量值list：</span><input id="pre2_flow" type="text"  value="" placeholder="*请用‘,’隔开数据（如1,2,3,4...）" style="width: 800px;"></span>
+ 				<div class="col-md-2" style="text-align: center;">
+ 					<button class="pull-righ btn btn-default" onclick="ajax_predict2()" style="margin-right: 10px;" value="">
+                		<span class="glyphicon glyphicon-hand-right" aria-hidden="true" style="margin-right:2px;"></span> 预测
+                	</button>
+ 				</div>
+ 				<hr style="filter: alpha(opacity=100,finishopacity=0,style=1)" width="100%" color='#C0C0C0' size=3>
+ 				<span class="col-md-12"><text class='pull-left' style="font-size: 16px;margin-bottom: 10px;">预测结果</text></span>
+ 				<span class="col-md-12" style="text-align: left;margin-bottom: 5px;"><span class="label label-default" style="margin-right: 2px;">预测流量值list：</span><text id='pre2_b_list'></text></span>
+ 				<div class="col-md-12">
+ 					<div class="col-md-6">
+ 						<div id="linemap2_1" style="height: 300px;width: 100%"></div>
+ 					</div>
+ 					<div class="col-md-6">
+ 						<div id="linemap2_2" style="height: 300px;width: 100%"></div>
+ 					</div>
+ 				</div>
+ 			</div>
+ 		</div>
+
+    </div>
+</body>
+</html>
+<script>
+    var globa_pre1_b_t1=1;
+    var globa_pre1_b_t2=1;
+    var globa_pre2_today_list=[];
+    var globa_pre2_tomorrow_list=[];
+
+    renderhtml();
+
+    function renderhtml() {
+        $('#pre1_b_t1').html(globa_pre1_b_t1);
+        renderchart1();
+        renderchart2();
+        renderchart3();
+        //$('#pre1_b_t2').html(globa_pre1_b_t2);
+    }
+
+    function ajax_predict1() {
+        var tb5=$("input[id='pre1_f_t5']").val();
+        var tb4=$("input[id='pre1_f_t4']").val();
+        var tb3=$("input[id='pre1_f_t3']").val();
+        var tb2=$("input[id='pre1_f_t2']").val();
+        var tb1=$("input[id='pre1_f_t1']").val();
+        var tb0=$("input[id='pre1_f_t0']").val();
+        //var bit=$("select[name='pre1_choose_bit']").val();
+        var bit=1;
+        var t_list=[];
+        var model='';
+        t_list.push(tb5,tb4,tb3,tb2,tb1,tb0);
+        if(bit==1)
+            model='model/lstm.h5';
+        else if(bit==2)
+            model='model/lstm.h5';
+        var sdata={'modelFile':model,'bit':bit,'dataList':t_list};
+        $.ajax({
+            type:'post',
+            url:'/predict_pre1',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+                request=eval('(' + request + ')')
+                prelist=request.prelist
+                if(prelist.length==2){
+                    globa_pre1_b_t1=prelist[0].toFixed(3)
+                    globa_pre1_b_t2=prelist[1].toFixed(3)
+                }
+                else if(prelist.length==1){
+                    globa_pre1_b_t1=prelist[0].toFixed(3)
+                }
+                renderhtml()
+                renderchart1()
+            }
+        });
+    }
+
+    function ajax_predict2(){
+    	var t_list=$("input[id='pre2_flow']").val();
+    	t_list=t_list.split(',');
+    	globa_pre2_today_list=t_list
+    	var bit=1;
+        var model='';
+        if(bit==1)
+            model='model/lstm.h5';
+        else if(bit==2)
+            model='model/lstm.h5';
+    	var sdata={'modelFile':model,'bit':bit,'dataList':t_list};
+    	$.ajax({
+            type:'post',
+            url:'/predict_pre2',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+                request=eval('(' + request + ')')
+                prelist=request.prelist
+            	globa_pre2_tomorrow_list=prelist
+            	renderchart3()
+            }
+        });
+    }
+
+    function renderchart1(){
+    	var dom2 = document.getElementById("gauge");
+    	var myChart2 = echarts.init(dom2);
+    	var app2 = {};
+    	option2 = null;
+    	option2 = {
+        	tooltip : {
+          	  formatter: "{a} <br/>{b} : {c}%"
+        	},
+        	toolbox: {
+            	feature: {
+                	restore: {},
+                	saveAsImage: {}
+            	}
+        	},
+        	series: [
+           	{
+                name: '',
+                type: 'gauge',
+                detail: {formatter:'{value}%'},
+                data: [{value: 0, name: '拥堵指数'}]  //这个value就是要传入的数值
+            }
+        	]	
+    	};
+    	option2.series[0].data[0].value = (Math.round(globa_pre1_b_t1/8000 * 10000)/100).toFixed(2)  //绑定在图表2的数值上
+        myChart2.setOption(option2, true);
+    }
+
+    function renderchart2(){
+    	var tb11=$("input[id='pre1_f_t11']").val();
+        var tb10=$("input[id='pre1_f_t10']").val();
+        var tb9=$("input[id='pre1_f_t9']").val();
+        var tb8=$("input[id='pre1_f_t8']").val();
+        var tb7=$("input[id='pre1_f_t7']").val();
+        var tb6=$("input[id='pre1_f_t6']").val();
+    	var tb5=$("input[id='pre1_f_t5']").val();
+        var tb4=$("input[id='pre1_f_t4']").val();
+        var tb3=$("input[id='pre1_f_t3']").val();
+        var tb2=$("input[id='pre1_f_t2']").val();
+        var tb1=$("input[id='pre1_f_t1']").val();
+        var tb0=$("input[id='pre1_f_t0']").val();
+        var tf1=globa_pre1_b_t1;
+        var data=[]
+        data.push(tb11,tb10,tb9,tb8,tb7,tb6,tb5,tb4,tb3,tb2,tb1,tb0,tf1)
+        chartX=['t-11','t-10','t-9','t-8','t-7','t-6','t-5','t-4','t-3','t-2','t-1','t','t+1']
+        var dom = document.getElementById("linemap1");
+    	var myChart1 = echarts.init(dom);
+
+    	option_pre={
+            title: {text: '流量折线图'},
+            tooltip: {trigger: 'axis'},
+            legend: {data:['flow']},
+            grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+            toolbox: {feature: {saveAsImage: {}}},
+            xAxis: {type: 'category', boundaryGap: false,data: chartX},
+            yAxis: {type: 'value'},
+            series: [
+                {name:'flow',type:'line',data:data},
+            ]
+        };
+        myChart1.setOption(option_pre);
+    }
+
+    function renderchart3(){
+    	var chartX=['00:00','00:30','01:00','01:30','02:00','02:30','02:00','02:30','03:00','03:30','04:00','04:30','05:00','05:30','05:00','05:30','06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30','22:00','22:30','22:00','22:30','23:00','23:30']
+    	var dom1 = document.getElementById("linemap2_1");
+    	var myChart1 = echarts.init(dom1);  	
+    	var option1={
+            title: {text: '当日流量折线图'},
+            tooltip: {trigger: 'axis'},
+            legend: {data:['flow']},
+            grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+            toolbox: {feature: {saveAsImage: {}}},
+            xAxis: {type: 'category', boundaryGap: false,data: chartX},
+            yAxis: {type: 'value'},
+            series: [
+                {name:'flow',type:'line',data:globa_pre2_today_list},
+            ]
+        };
+        myChart1.setOption(option1);
+
+        var dom2 = document.getElementById("linemap2_2");
+    	var myChart2 = echarts.init(dom2);  	
+    	var option2={
+            title: {text: '明日流量折线图'},
+            tooltip: {trigger: 'axis'},
+            legend: {data:['flow']},
+            grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+            toolbox: {feature: {saveAsImage: {}}},
+            xAxis: {type: 'category', boundaryGap: false,data: chartX},
+            yAxis: {type: 'value'},
+            series: [
+                {name:'flow',type:'line',data:globa_pre2_tomorrow_list},
+            ]
+        };
+        myChart2.setOption(option2);
+    }
+</script>
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js">!function(){function n(n,e,t){return n.getAttribute(e)||t}function e(n){return document.getElementsByTagName(n)}function t(){var t=e("script"),o=t.length,i=t[o-1];return{l:o,z:n(i,"zIndex",-1),o:n(i,"opacity",.5),c:n(i,"color","0,0,0"),n:n(i,"count",99)}}function o(){a=m.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,c=m.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight}function i(){r.clearRect(0,0,a,c);var n,e,t,o,m,l;s.forEach(function(i,x){for(i.x+=i.xa,i.y+=i.ya,i.xa*=i.x>a||i.x<0?-1:1,i.ya*=i.y>c||i.y<0?-1:1,r.fillRect(i.x-.5,i.y-.5,1,1),e=x+1;e<u.length;e++)n=u[e],null!==n.x&&null!==n.y&&(o=i.x-n.x,m=i.y-n.y,l=o*o+m*m,l<n.max&&(n===y&&l>=n.max/2&&(i.x-=.03*o,i.y-=.03*m),t=(n.max-l)/n.max,r.beginPath(),r.lineWidth=t/2,r.strokeStyle="rgba("+d.c+","+(t+.2)+")",r.moveTo(i.x,i.y),r.lineTo(n.x,n.y),r.stroke()))}),x(i)}var a,c,u,m=document.createElement("canvas"),d=t(),l="c_n"+d.l,r=m.getContext("2d"),x=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(n){window.setTimeout(n,1e3/45)},w=Math.random,y={x:null,y:null,max:2e4};m.id=l,m.style.cssText="position:fixed;top:0;left:0;z-index:"+d.z+";opacity:"+d.o,e("body")[0].appendChild(m),o(),window.onresize=o,window.onmousemove=function(n){n=n||window.event,y.x=n.clientX,y.y=n.clientY},window.onmouseout=function(){y.x=null,y.y=null};for(var s=[],f=0;d.n>f;f++){var h=w()*a,g=w()*c,v=2*w()-1,p=2*w()-1;s.push({x:h,y:g,xa:v,ya:p,max:6e3})}u=s.concat([y]),setTimeout(function(){i()},100)}();</script>

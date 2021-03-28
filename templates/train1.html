@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>训练模块</title>
+	<meta http-equiv="content-type" content="charset=utf-8"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+
+        <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">	
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <link href="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/i18n/defaults-cs_CZ.js"></script>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=4fTH4IpG204pHWnekXS8cmAXGxIFEd74"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+<style type="text/css">
+    	#top_row{text-align: center;}
+		#index_row div text{font-color:lighten(#000, 33.5%);}
+         .fileinput-button input{
+            position:absolute;
+            right: 0px;
+            top:0px;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 7px;
+        }
+    </style>
+</head>
+<body id="app">
+	 <div class="container">
+    	<div id='top_row' class="row" style="height: 80px;">
+    		<div class="col-md-1"></div>
+    		<div id='top_row_title' class="col-md-10" style="text-align: center">
+                <h1>城市交通流量大数据系统<small>成都区域</small></h1>
+    		</div>
+    		<div class="col-md-1"></div>
+    	</div>
+
+
+    	<hr style="filter: alpha(opacity=100,finishopacity=0,style=1)" width="100%" color='#C0C0C0' size=3>
+
+
+    	<div id='index_row' class="row" style="height: 50px;">
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+    		     <li role="presentation col-md-3" ><a href="show">可视化模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                 <li role="presentation col-md-3 text-center"><a href="predict">预测模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                <li role="presentation col-md-3 text-center" class="active"><a href="#">训练模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                <li role="presentation col-md-3 text-center"><a href="dataManager">数据管理模块</a></li>
+            </ul>
+    	</div>
+
+		<div class="panel panel-default">
+		  <div class="panel-body row">
+		    	<button type="button" class="pull-right btn btn-success fileinput-button col-md-1" style="margin-right: 15px;margin-left:10px;" onclick="">
+                    导入
+                    <input type="file" name="train_file" value="训练集"><text>训练集</text>
+                </button>
+
+                <button type="button" class="pull-right btn btn-success fileinput-button col-md-1" style="margin-right: 10px;" onclick="">
+                    </span>导入
+                    <input type="file" name="test_file" value="测试集"><text>测试集</text>
+                </button>
+                <button class="btn btn-warning col-md-1" onclick="ajax_submit_filePath()" style="margin-right: 10px;" value="提交数据集">
+                	<span class="glyphicon glyphicon-folder-open" aria-hidden="true" style="margin-right: 2px;"></span>提交数据
+                </button>
+
+                <text class="col-md-1"></text>
+
+                <div class="input-group col-md-2" style="margin-right: 10px;">
+  					<span class="input-group-addon" id="basic-addon1" >迭代次数</span>
+  					<input id="choose_epochs" type="text" class="form-control" aria-describedby="basic-addon1" value="5" >
+				</div>
+
+				<div class="input-group col-md-2" style="margin-right: 10px;">
+  					<span class="input-group-addon" id="basic-addon1" >批次大小</span>
+		  			<select name="choose_batch" class="form-control" aria-describedby="basic-addon1">
+		                <option value="4">4</option>
+		                <option value="8">8</option>
+		                <option value="16" selected>16</option>
+		                <option value="32">32</option>
+		                <option value="64">64</option>
+		            </select>
+				</div>
+
+				<div class="input-group col-md-2" style="margin-right: 10px;">
+  					<span class="input-group-addon" id="basic-addon1" >预测位数</span>
+		  			<select name="choose_bit" class="form-control" aria-describedby="basic-addon1">
+		                <option value="1" selected>1</option>
+		            </select>
+				</div>
+
+					<button class="pull-righ btn btn-warning col-md-1 " onclick="ajax_submit_train()" style="margin-right: 10px;" value="">
+                		<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="margin-right: 2px;"></span>训练
+                	</button>
+
+				 
+		  </div>
+		</div>
+
+		<div>
+		   <p style="font-size: 18px;color:gray;">状态栏</p>
+       	   <p class="row">
+             <span class="col-md-3" style="padding-left: 5%;">训练集：<span class="label label-default"><text id="trainFile_path"></text></span></span>
+             <span class="col-md-3" style="padding-left: 5%;">测试集：<span class="label label-default"><text id="testFile_path"></text></span></span>
+             <span class="col-md-3" style="padding-left: 5%;">训练状态：<span class="label label-default"><text id="train_state"></text></span></span>
+             <span class="col-md-3" style="padding-left: 5%;">预测位数：<span class="label label-default"><text id="pre_bit"></text></span></span>
+           </p>
+		</div>
+
+		<hr style="filter: alpha(opacity=100,finishopacity=0,style=1)" width="100%" color='#C0C0C0' size=3>
+		
+		<div id="show_tab_zb" class="list-group">
+  			<a class="list-group-item active" style="font-color:white">性能指标</a>
+  			<a class="list-group-item">解释方差得分（explained_variance_score）:<text id="evs"></text></a>
+  			<a class="list-group-item">方差平方得分（r2_score）:<text id="r2"></text></a>
+ 			<a class="list-group-item">平均绝对百分误差（mape）:<text id="mape"></text></a>
+  			<a class="list-group-item">平均绝对误差（mae）:<text id="mae"></text></a>
+  			<a class="list-group-item">均方差（mse）:<text id="mse"></text></a>
+  			<a class="list-group-item">均方根误差(rmse):<text id="rmse"></text></a>
+		</div>
+
+		<div class="jumbotron">
+ 			<p>模型曲线图</p>
+ 			<div class="row">
+ 				<div id="pre_chart" class="col-md-6" style="height:400px;"></div>
+       		 	<div id="loss_chart" class="col-md-6" style="height:400px;"></div>
+ 			</div>
+		</div>
+    </div>
+
+
+</body>
+</html>
+
+<script>
+    var globa_trainFile_path='noChoose';
+    var globa_testFile_path='noChoose';
+    var globa_train_state='noTrain';
+    var globa_pre_bit=1;
+    var globa_predData=[];
+    var globa_trueData=[];
+    var globa_indicationList={'mape':0,'vs':0,'mae':0,'mse':0,'r2':0,'rmse':0}
+    var globa_lossData=[];
+    var globa_mapeData=[];
+
+    var preChart = echarts.init(document.getElementById('pre_chart'));
+    var lossChart = echarts.init(document.getElementById('loss_chart'));
+
+    renderhtml();
+
+    function renderhtml(){
+        $('#trainFile_path').html(globa_trainFile_path);
+        $('#testFile_path').html(globa_testFile_path);
+        $('#train_state').html(globa_train_state);
+        $('#pre_bit').html(globa_pre_bit);
+        $("input[name='train_file']").val('')
+        $("input[name='test_file']").val('');
+        renderChart();
+        renderIndication()
+    }
+
+    function renderChart() {
+        var chartTrue=[]
+        var chartPre=[]
+        var chartX=[]
+        var chartlen=-1
+        var datalen=globa_trueData.length
+
+        var chartLoss=globa_lossData
+        var chartlen_loss=globa_lossData.length
+        var chartX_loss=[]
+
+        if(datalen>144){
+            chartlen=144
+            chartTrue=globa_trueData.slice(0,143)
+            chartPre=globa_predData.slice(0,143)
+        }
+        else{
+            chartlen=datalen
+            chartTrue=globa_trueData
+            chartPre=globa_predData
+        }
+        for(var i=0;i<chartlen;i++){
+            chartX.push(i+1)
+        }
+        for(var i=0;i<chartlen_loss;i++){
+            chartX_loss.push(i+1)
+        }
+
+        option_pre={
+            title: {text: '预测折线图'},
+            tooltip: {trigger: 'axis'},
+            legend: {data:['true','lstm']},
+            grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+            toolbox: {feature: {saveAsImage: {}}},
+            xAxis: {type: 'category', boundaryGap: false,data: chartX},
+            yAxis: {type: 'value'},
+            series: [
+                {name:'true',type:'line',data:chartTrue},
+                {name:'lstm',type:'line',data:chartPre,itemStyle:{normal:{lineStyle:{color:'#FFCC00'}}}}
+            ]
+        };
+        preChart.setOption(option_pre);
+
+        option_loss={
+            title: {text: '训练损失折线图'},
+            tooltip: {trigger: 'axis'},
+            legend: {data:['loss']},
+            grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+            toolbox: {feature: {saveAsImage: {}}},
+            xAxis: {type: 'category', boundaryGap: false,data: chartX_loss},
+            yAxis: {type: 'value'},
+            series: [
+                {name:'loss',type:'line',data:chartLoss}
+            ]
+        };
+        lossChart.setOption(option_loss)
+    }
+
+    function renderIndication() {
+        $("#mape").html(globa_indicationList.mape.toFixed(2))
+        $("#evs").html(globa_indicationList.vs.toFixed(2))
+        $("#r2").html(globa_indicationList.r2.toFixed(2))
+        $("#mae").html(globa_indicationList.mae.toFixed(2))
+        $("#mse").html(globa_indicationList.mse.toFixed(2))
+        $("#rmse").html(globa_indicationList.rmse.toFixed(2))
+    }
+
+    function ajax_submit_filePath() {
+        var trainf=$("input[name='train_file']").val().replace('C:\\fakepath\\','');
+        var testf=$("input[name='test_file']").val().replace('C:\\fakepath\\','');
+        var fpath={'train_file':trainf,'test_file':testf};
+
+        $.ajax({
+            type:'post',
+            url:'/train1_sendFile',
+            async:false,
+            data:fpath,
+            datatype:'json',
+            success:function (request) {
+                request=eval('(' + request + ')')
+                globa_trainFile_path=request.trainFile_path
+                globa_testFile_path=request.testFile_path
+                renderhtml()
+            }
+        });
+
+    }
+
+    function ajax_submit_train(){
+        var epochs=$("input[id='choose_epochs']").val()
+        var batch=$("select[name='choose_batch']").val()
+        var bit=$("select[name='choose_bit']").val()
+        var sdata={'epochs':epochs,'batch':batch,'bit':bit}
+        //var setChoose=$("select[name='choose_set']").val()
+        //var validaton=$("input[id='choose_validaton']").val()
+        //var sdata={'epochs':epochs,'batch':batch,'bit':bit,'choose_set':setChoose,'validaton':validaton}
+
+         $.ajax({
+            type:'post',
+            url:'/train1_train',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+                request=eval('(' + request + ')')
+                globa_predData=request.predictList
+                globa_trueData=request.trueList
+                globa_indicationList=eval('(' + request.indicationList + ')')
+                globa_lossData=request.loss
+                globa_mapeData=request.mape
+                globa_train_state='completeTrain'
+                renderhtml()
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js">!function(){function n(n,e,t){return n.getAttribute(e)||t}function e(n){return document.getElementsByTagName(n)}function t(){var t=e("script"),o=t.length,i=t[o-1];return{l:o,z:n(i,"zIndex",-1),o:n(i,"opacity",.5),c:n(i,"color","0,0,0"),n:n(i,"count",99)}}function o(){a=m.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,c=m.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight}function i(){r.clearRect(0,0,a,c);var n,e,t,o,m,l;s.forEach(function(i,x){for(i.x+=i.xa,i.y+=i.ya,i.xa*=i.x>a||i.x<0?-1:1,i.ya*=i.y>c||i.y<0?-1:1,r.fillRect(i.x-.5,i.y-.5,1,1),e=x+1;e<u.length;e++)n=u[e],null!==n.x&&null!==n.y&&(o=i.x-n.x,m=i.y-n.y,l=o*o+m*m,l<n.max&&(n===y&&l>=n.max/2&&(i.x-=.03*o,i.y-=.03*m),t=(n.max-l)/n.max,r.beginPath(),r.lineWidth=t/2,r.strokeStyle="rgba("+d.c+","+(t+.2)+")",r.moveTo(i.x,i.y),r.lineTo(n.x,n.y),r.stroke()))}),x(i)}var a,c,u,m=document.createElement("canvas"),d=t(),l="c_n"+d.l,r=m.getContext("2d"),x=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(n){window.setTimeout(n,1e3/45)},w=Math.random,y={x:null,y:null,max:2e4};m.id=l,m.style.cssText="position:fixed;top:0;left:0;z-index:"+d.z+";opacity:"+d.o,e("body")[0].appendChild(m),o(),window.onresize=o,window.onmousemove=function(n){n=n||window.event,y.x=n.clientX,y.y=n.clientY},window.onmouseout=function(){y.x=null,y.y=null};for(var s=[],f=0;d.n>f;f++){var h=w()*a,g=w()*c,v=2*w()-1,p=2*w()-1;s.push({x:h,y:g,xa:v,ya:p,max:6e3})}u=s.concat([y]),setTimeout(function(){i()},100)}();</script>

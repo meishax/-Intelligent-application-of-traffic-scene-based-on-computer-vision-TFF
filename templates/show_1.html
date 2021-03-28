@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>可视化模块</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">	
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <link href="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/i18n/defaults-cs_CZ.js"></script>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=4fTH4IpG204pHWnekXS8cmAXGxIFEd74"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+
+</head>
+<body>
+    <div class="container">
+    	<div id='top_row' class="row" style="height: 80px;">
+    		<div class="col-md-1"></div>
+    		<div id='top_row_title' class="col-md-10" style="text-align: center">
+                <h1>城市交通流量大数据系统<small>成都区域</small></h1>
+    		</div>
+    		<div class="col-md-1"></div>
+    	</div>
+
+    	<hr style="filter: alpha(opacity=100,finishopacity=0,style=1)" width="100%" color='#C0C0C0' size=3>
+
+
+    	<div id='index_row' class="row" style="height: 50px;">
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+    		     <li role="presentation col-md-3" class="active"><a href="#">可视化模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                 <li role="presentation col-md-3 text-center"><a href="predict">预测模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                <li role="presentation col-md-3 text-center"><a href="train">训练模块</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;">
+                <li role="presentation col-md-3 text-center"><a href="dataManager">数据管理模块</a></li>
+            </ul>
+    	</div>
+
+        <div id='show_row' class="row" style="height: 50px;background-color:whitesmoke;border-radius: 10px">
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;margin-top: 5px;">
+                <li role="presentation col-md-3"><a href="show" style="font-size: 13px">城市地图热力图</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;margin-top: 5px;">
+                <li role="presentation col-md-3 text-center" class="active"><a href="show_1" style="font-size: 13px">区域流量折线图</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;margin-top: 5px;">
+                <li role="presentation col-md-3 text-center"><a href="show_2" style="font-size: 13px">时段流量热力图</a></li>
+            </ul>
+            <ul class="nav nav-pills col-md-3" style="padding-left: 5%;margin-top: 5px;">
+                <li role="presentation col-md-3 text-center"><a href="show_3" style="font-size: 13px">区域流量热力图</a></li>
+            </ul>
+        </div>
+
+        <div class="container" style="padding-top: 40px;">
+        <div id='chart2' class="panel panel-default" style="height: 720px;">
+            <div class="panel-body">
+                <p class="row">
+                    <text class="text-left col-md-3"><text id="chart2_title_region"></text>区该月交通流量折线图</text>
+                    <text class="col-md-7 text-right" style="font-size:18px;margin-top: 3px;">选择区域:</text>
+                    <select class="col-md-1 form-control" name="line-aqi-region-select" onchange="renderChart2()">
+                    　　<option value="2">2</option>
+                    　　<option value="3">3</option>
+                    　　<option value="4">4</option>
+                    　　<option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                    </select>
+                </p>
+                <div id="line-aqi" style="height: 650px;"></div>
+            </div>
+        </div>
+        </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+
+renderhtml();
+
+function renderhtml() {
+    renderChart2();
+    renderChart3();
+    renderChart4();
+}
+
+//////////
+//chart2//
+//////////
+function renderChart2(){
+    var region=$("select[name='line-aqi-region-select']").val();
+    var sdata={'region':region}
+    $.ajax({
+            type:'post',
+            url:'/chart2_load_byregion',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+                request=eval('(' + request + ')')
+                time=request.timelist;
+                flow=request.flowlist;
+                chart2show(time,flow,region)
+            }
+    });
+}
+
+function chart2show(time,flow,region){
+    $("#chart2_title_region").html(region);
+    var dom = document.getElementById("line-aqi");
+    var myChart = echarts.init(dom);
+    var app = {};
+    var option = null;
+    myChart.setOption(option = {
+        title: {
+            text: ''
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: {
+            data: time
+        },
+        yAxis: {
+            splitLine: {
+                show: false
+            }
+        },
+        toolbox: {
+            left: 'center',
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        dataZoom: [{
+            startValue: '2016-11-01'
+        }, {
+            type: 'inside'
+        }],
+        visualMap: {
+            top: 10,
+            right: 10,
+            pieces: [{
+                gt: 0,
+                lte: 200,
+                color: '#096'
+            }, {
+                gt: 200,
+                lte: 400,
+                color: '#ffde33'
+            }, {
+                gt: 400,
+                lte: 600,
+                color: '#ff9933'
+            }, {
+                gt: 600,
+                lte: 800,
+                color: '#cc0033'
+            }, {
+                gt: 800,
+                lte: 1000,
+                color: '#660099'
+            }, {
+                gt: 1000,
+                color: '#7e0023'
+            }],
+            outOfRange: {
+                color: '#999'
+            }
+        },
+        series: {
+            name: '交通流量',
+            type: 'line',
+            data:flow,
+            // data:data.map(function (item) {
+            //     return [item[2]];
+            // }),
+            markLine: {
+                silent: true,
+                data: [{
+                    yAxis: 200
+                }, {
+                    yAxis: 400
+                }, {
+                    yAxis: 600
+                }, {
+                    yAxis: 800
+                }, {
+                    yAxis: 1000
+                }]
+            }
+        }
+    });
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+}
+
+//////////
+//chart3//
+//////////
+function renderChart3(){
+    var region=$("select[name='heatmap0-region-select']").val();
+    var sdata={'region':region}
+    $.ajax({
+            type:'post',
+            url:'/chart3_load_byregion',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+                request=eval('(' + request + ')')
+                day=request.daylist;
+                hour=request.hourlist;
+                flow=request.flowlist;
+                chart3show(day,hour,flow,region)
+            }
+    });
+}
+
+function chart3show(days,hours,flow,region) {
+    $("#chart3_title_region").html(region);
+    var dom = document.getElementById("heatmap0");
+    var myChart = echarts.init(dom);
+    var app = {};
+    var option = null;
+    app.title = '2016年11月成都某区域交通流量统计';
+
+    var days=days
+    var hours=hours
+    var flow=flow
+
+    var j=0,t=0,k = 0;
+    var data = new Array();
+    for(var i = 0; i<3600;i++){
+            data[i] = new Array();
+            data[i][0]=j;
+            data[i][1]=t++;
+            data[i][2]=flow[k++];
+            if(j>=30){
+                j=0;
+            }
+            if(t>=12){
+                t=0;
+                j++;
+            }
+    }
+
+    var data = data.map(function (item) {
+            return [item[1], item[0], item[2] || '-'];
+    });
+    option = {
+            title: {
+                top: 330,
+                left: 'center',
+                text: '',
+                textStyle: {
+                    color: '#666'
+                }
+            },
+            tooltip: {
+                position: 'top'
+            },
+            animation: false,
+            grid: {
+                top:20,
+                height: '70%',
+                y: '1%'
+            },
+            xAxis: {
+                type: 'category',
+                data: hours,
+                splitArea: {
+                    show: true
+                }
+            },
+            yAxis: {
+                type: 'category',
+                data:days,
+                splitArea: {
+                    show: true
+                }
+            },
+            visualMap: {
+                text:["拥堵","通畅"],
+                min: 0,
+                max: 4000,
+                calculable: true,
+                orient: 'vertical',
+                left: 1400,
+                bottom: '35%',
+                dayLabel: {
+                    margin: 5
+                }
+            },
+            series: [{
+                name: '车流量',
+                type: 'heatmap',
+                data: data,
+                label: {
+                    normal: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+
+        var dom2 = document.getElementById("heatmap0_gauge");
+        var myChart2 = echarts.init(dom2);
+        var app2 = {};
+        var option2 = null;
+        option2 = {
+            tooltip : {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: '',
+                    type: 'gauge',
+                    detail: {formatter:'{value}%'},
+                    data: [{value: 0, name: '拥堵指数'}]  //这个value就是要传入的数值
+                }
+            ]
+        };
+
+        if (option2 && typeof option2 === "object") {
+            myChart2.setOption(option2, true);
+        }
+
+        var selectedData;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+            myChart.on('click', function (e) {
+                selectedData = e.valueOf().data[2];
+                option2.series[0].data[0].value = (Math.round(selectedData/3800 * 10000)/100).toFixed(2)  //绑定在图表2的数值上
+                myChart2.setOption(option2, true);
+            });
+        }
+}
+
+
+//////////
+//chart4//
+//////////
+function renderChart4(){
+    var day=$("select[name='heatmap1-day-select']").val();
+    var sdata={'day':day}
+    $.ajax({
+            type:'post',
+            url:'/chart4_load_byday',
+            async:false,
+            data:sdata,
+            datatype:'json',
+            success:function (request) {
+                request=eval('(' + request + ')')
+                regionlist=request.regionlist
+                hourlist=request.hourlist
+                flowlist=request.flowlist
+                chart4show(day,hourlist,flowlist,regionlist)
+            }
+    });
+}
+
+function chart4show(days,hours,flow,region){
+    $("#chart4_title_region").html(days);
+    var dom = document.getElementById("heatmap1");
+    var myChart = echarts.init(dom);
+    var app = {};
+    var option = null;
+    app.title = '2016年11月成都某区域交通流量统计';
+
+    var j=0,t=0,k = 0;
+    var data = new Array();
+    for(var i = 0; i<12*11;i++){
+        data[i] = new Array();
+        data[i][0]=j++;
+        data[i][1]=t;
+        data[i][2]=flow[k++];
+        if(j>=12){
+            j=0;
+            t++;
+        }
+        if(t>=11){
+            t=0;
+        }
+    }
+    //console.log(data)
+    var data = data.map(function (item) {
+        return [item[1], item[0], item[2]];
+    });
+    option = {
+        title: {
+            top: 330,
+            left: 'center',
+            text: '',
+            textStyle: {
+                color: '#666'
+            }
+        },
+        tooltip: {
+            position: 'top'
+        },
+        animation: false,
+        grid: {
+            top:20,
+            height: '70%',
+            y: '1%'
+        },
+        xAxis: {
+            type: 'category',
+            data:region,
+            splitArea: {
+                show: true
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data:hours,
+            splitArea: {
+                show: true
+            }
+        },
+        visualMap: {
+            text:["拥堵","通畅"],
+            min: 0,
+            max: 8000,
+            calculable: true,
+            orient: 'vertical',
+            left: 1400,
+            bottom: '35%',
+            dayLabel: {
+                margin: 5
+            }
+        },
+        series: [{
+            name: '车流量',
+            type: 'heatmap',
+            data: data,
+            label: {
+                normal: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    var dom2 = document.getElementById("heatmap1_gauge");
+    var myChart2 = echarts.init(dom2);
+    var app2 = {};
+    var option2 = null;
+    option2 = {
+        tooltip : {
+            formatter: "{a} <br/>{b} : {c}%"
+        },
+        toolbox: {
+            feature: {
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        series: [
+            {
+                name: '',
+                type: 'gauge',
+                detail: {formatter:'{value}%'},
+                data: [{value: 0, name: '拥堵指数'}]  //这个value就是要传入的数值
+            }
+        ]
+    };
+
+    // setInterval(function () {  //给value赋值 赋值之后要重新setOption
+    //     option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+    //     myChart.setOption(option, true);
+    // },2000);
+    // ;
+    if (option2 && typeof option2 === "object") {
+        myChart2.setOption(option2, true);
+    }
+
+    var selectedData;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+        myChart.on('click', function (e) {
+            selectedData = e.valueOf().data[2];
+            option2.series[0].data[0].value = (Math.round(selectedData/8000 * 10000)/100).toFixed(2)  //绑定在图表2的数值上
+            myChart2.setOption(option2, true);
+        });
+    }
+}
+
+</script>
+
+
+
+
+<script type="text/javascript">
+var dom = document.getElementById("a");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+var COLORS = ["#cd3333", "#c0474e", "#ca5f5d", "#dd937b", "#eec591", "#ffffff"];
+var lngExtent = [30.647306, 30.767306];
+var latExtent = [103.922645, 104.162645];
+var cellCount = [9, 20];
+var cellSizeCoord = [
+    0.015,
+    0.015
+];
+var gapSize = 0;
+var data = [
+[0,0,'n'],[1,0,'n'],[2,0,'n'],[3,0,'n'],[4,0,'n'],[5,0,'n'],[6,0,'n'],[7,0,'n'],[8,0,'n'],[9,0,'n'],[10,0,'n'],[11,0,'n'],[12,0,'n'],[13,0,'n'],[14,0,'n'],[15,0,'n'],[16,0,'n'],[17,0,'n'],[18,0,'n'],[19,0,'n'],
+[0,1,'n'],[1,1,'n'],[2,1,'n'],[3,1,'n'],[4,1,'n'],[5,1,'n'],[6,1,'n'],[7,1,'n'],[8,1,'n'],[9,1,'n'],[10,1,'n'],[11,1,'n'],[12,1,'n'],[13,1,'n'],[14,1,'n'],[15,1,'n'],[16,1,'n'],[17,1,'n'],[18,1,'n'],[19,1,'n'],
+[0,2,'n'],[1,2,'n'],[2,2,'n'],[3,2,'n'],[4,2,'n'],[5,2,'n'],[6,2,1],[7,2,1],[8,2,5],[9,2,5],[10,2,5],[11,2,5],[12,2,3],[13,2,3],[14,2,'n'],[15,2,'n'],[16,2,'n'],[17,2,'n'],[18,2,'n'],[19,2,'n'],
+[0,3,'n'],[1,3,'n'],[2,3,'n'],[3,3,'n'],[4,3,'n'],[5,3,'n'],[6,3,1],[7,3,1],[8,3,5],[9,3,5],[10,3,5],[11,3,5],[12,3,3],[13,3,3],[14,3,'n'],[15,3,'n'],[16,3,'n'],[17,3,'n'],[18,3,'n'],[19,3,'n'],
+[0,4,'n'],[1,4,'n'],[2,4,'n'],[3,4,'n'],[4,4,'n'],[5,4,'n'],[6,4,1],[7,4,1],[8,4,4],[9,4,4],[10,4,4],[11,4,4],[12,4,2],[13,4,2],[14,4,'n'],[15,4,'n'],[16,4,'n'],[17,4,'n'],[18,4,'n'],[19,4,'n'],
+[0,5,'n'],[1,5,'n'],[2,5,'n'],[3,5,'n'],[4,5,'n'],[5,5,'n'],[6,5,1],[7,5,1],[8,5,4],[9,5,4],[10,5,4],[11,5,4],[12,5,2],[13,5,2],[14,5,'n'],[15,5,'n'],[16,5,'n'],[17,5,'n'],[18,5,'n'],[19,5,'n'],
+[0,6,'n'],[1,6,'n'],[2,6,'n'],[3,6,'n'],[4,6,'n'],[5,6,'n'],[6,6,'n'],[7,6,'n'],[8,6,3],[9,6,3],[10,6,2],[11,6,2],[12,6,1],[13,6,1],[14,6,'n'],[15,6,'n'],[16,6,'n'],[17,6,'n'],[18,6,'n'],[19,6,'n'],
+[0,7,'n'],[1,7,'n'],[2,7,'n'],[3,7,'n'],[4,7,'n'],[5,7,'n'],[6,7,'n'],[7,7,'n'],[8,7,3],[9,7,3],[10,7,2],[11,7,2],[12,7,1],[13,7,1],[14,7,'n'],[15,7,'n'],[16,7,'n'],[17,7,'n'],[18,7,'n'],[19,7,'n'],
+[0,8,'n'],[1,8,'n'],[2,8,'n'],[3,8,'n'],[4,8,'n'],[5,8,'n'],[6,8,'n'],[7,8,'n'],[8,8,'n'],[9,8,'n'],[10,8,'n'],[11,8,'n'],[12,8,'n'],[13,8,'n'],[14,8,'n'],[15,8,'n'],[16,8,'n'],[17,8,'n'],[18,8,'n'],[19,8,'n']
+];
+
+
+setInterval(function () {  //给value赋值 赋值之后要重新setOption
+    var j=Math.ceil(Math.random()*5,10);
+    var k=Math.ceil(Math.random()*5,10);
+    var h=Math.ceil(Math.random()*5,10);
+    data[89]=[9,4,j];
+    data[48]=[8,2,k];
+    data[109]=[9,5,h];
+    
+    option.series[0].data=data;
+    myChart.setOption(option, true);
+},2000);
+;
+
+function renderItem(params, api) {
+    var context = params.context;
+    var lngIndex = api.value(0);
+    var latIndex = api.value(1);
+    // var coordLeftTop = [
+    //     +(latExtent[0] + lngIndex * cellSizeCoord[0]).toFixed(6),
+    //     +(lngExtent[0] + latIndex * cellSizeCoord[1]).toFixed(6)
+    // ];
+    var pointLeftTop = getCoord(params, api, lngIndex, latIndex);
+    var pointRightBottom = getCoord(params, api, lngIndex + 1, latIndex + 1);
+
+    return {
+        type: 'rect',
+        shape: {
+            x: pointLeftTop[0],
+            y: pointLeftTop[1],
+            width: pointRightBottom[0] - pointLeftTop[0],
+            height: pointRightBottom[1] - pointLeftTop[1]
+        },
+        style: api.style({
+            stroke: 'rgba(0,0,0,0.1)'
+        }),
+        styleEmphasis: api.styleEmphasis()
+    };
+}
+
+function getCoord(params, api, lngIndex, latIndex) {
+    var coords = params.context.coords || (params.context.coords = []);
+    var key = lngIndex + '-' + latIndex;
+
+    // bmap returns point in integer, which makes cell width unstable.
+    // So we have to use right bottom point.
+    return coords[key] || (coords[key] = api.coord([
+        +(latExtent[0] + lngIndex * cellSizeCoord[0]).toFixed(6),
+        +(lngExtent[0] + latIndex * cellSizeCoord[1]).toFixed(6)
+    ]));
+}
+
+option = {
+    tooltip: {},
+    visualMap: {
+        type: 'piecewise',
+        inverse: true,
+        top: 10,
+        left: 10,
+         pieces: [
+        {
+            value: 5, color: COLORS[0]
+        }, {
+            value: 4, color: COLORS[1]
+        }, {
+            value: 3, color: COLORS[2]
+        }, {
+            value: 2, color: COLORS[3]
+        }, {
+            value: 1, color: COLORS[4]
+        }, {
+            value: 'n', color: COLORS[5]
+        }
+        ],
+        borderColor: '#ccc',
+        borderWidth: 2,
+        backgroundColor: '#eee',
+        dimension: 2,
+        inRange: {
+            color: COLORS,
+            opacity: 0.7
+        }
+    },
+    series: [
+        {
+            type: 'custom',
+            coordinateSystem: 'bmap',
+            renderItem: renderItem,
+            animation: false,
+            itemStyle: {
+                emphasis: {
+                    color: '#ffffff'
+                }
+            },
+            encode: {
+                tooltip: 2
+            },
+            data: data
+        }
+    ],
+    bmap: {
+        center: [104.08, 30.72],
+        zoom: 13,
+        roam: true,
+        mapStyle: {
+            styleJson: [{
+                'featureType': 'water',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#d1d1d1'
+                }
+            }, {
+                'featureType': 'land',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#f3f3f3'
+                }
+            }, {
+                'featureType': 'railway',
+                'elementType': 'all',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'highway',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#999999'
+                }
+            }, {
+                'featureType': 'highway',
+                'elementType': 'labels',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'arterial',
+                'elementType': 'geometry',
+                'stylers': {
+                    'color': '#fefefe'
+                }
+            }, {
+                'featureType': 'arterial',
+                'elementType': 'geometry.fill',
+                'stylers': {
+                    'color': '#fefefe'
+                }
+            }, {
+                'featureType': 'poi',
+                'elementType': 'all',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'green',
+                'elementType': 'all',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'subway',
+                'elementType': 'all',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'manmade',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#d1d1d1'
+                }
+            }, {
+                'featureType': 'local',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#d1d1d1'
+                }
+            }, {
+                'featureType': 'arterial',
+                'elementType': 'labels',
+                'stylers': {
+                    'visibility': 'off'
+                }
+            }, {
+                'featureType': 'boundary',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#fefefe'
+                }
+            }, {
+                'featureType': 'building',
+                'elementType': 'all',
+                'stylers': {
+                    'color': '#d1d1d1'
+                }
+            }, {
+                'featureType': 'label',
+                'elementType': 'labels.text.fill',
+                'stylers': {
+                    'color': 'rgba(0,0,0,0)'
+                }
+            }]
+        }
+    }
+};;
+
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+</script>
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js">!function(){function n(n,e,t){return n.getAttribute(e)||t}function e(n){return document.getElementsByTagName(n)}function t(){var t=e("script"),o=t.length,i=t[o-1];return{l:o,z:n(i,"zIndex",-1),o:n(i,"opacity",.5),c:n(i,"color","0,0,0"),n:n(i,"count",99)}}function o(){a=m.width=window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth,c=m.height=window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight}function i(){r.clearRect(0,0,a,c);var n,e,t,o,m,l;s.forEach(function(i,x){for(i.x+=i.xa,i.y+=i.ya,i.xa*=i.x>a||i.x<0?-1:1,i.ya*=i.y>c||i.y<0?-1:1,r.fillRect(i.x-.5,i.y-.5,1,1),e=x+1;e<u.length;e++)n=u[e],null!==n.x&&null!==n.y&&(o=i.x-n.x,m=i.y-n.y,l=o*o+m*m,l<n.max&&(n===y&&l>=n.max/2&&(i.x-=.03*o,i.y-=.03*m),t=(n.max-l)/n.max,r.beginPath(),r.lineWidth=t/2,r.strokeStyle="rgba("+d.c+","+(t+.2)+")",r.moveTo(i.x,i.y),r.lineTo(n.x,n.y),r.stroke()))}),x(i)}var a,c,u,m=document.createElement("canvas"),d=t(),l="c_n"+d.l,r=m.getContext("2d"),x=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(n){window.setTimeout(n,1e3/45)},w=Math.random,y={x:null,y:null,max:2e4};m.id=l,m.style.cssText="position:fixed;top:0;left:0;z-index:"+d.z+";opacity:"+d.o,e("body")[0].appendChild(m),o(),window.onresize=o,window.onmousemove=function(n){n=n||window.event,y.x=n.clientX,y.y=n.clientY},window.onmouseout=function(){y.x=null,y.y=null};for(var s=[],f=0;d.n>f;f++){var h=w()*a,g=w()*c,v=2*w()-1,p=2*w()-1;s.push({x:h,y:g,xa:v,ya:p,max:6e3})}u=s.concat([y]),setTimeout(function(){i()},100)}();</script>
